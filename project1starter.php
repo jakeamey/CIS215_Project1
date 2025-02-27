@@ -41,6 +41,25 @@
         <option value="a">Agender</option>
         <option value="o">Choose not to say/Other</option>
     </select>
+    <fieldset>
+        <legend>What is your favorite type of music? (Select all that apply)</legend>
+        <input type="checkbox" name="music[]" id="rock" value="rock"><label for="rock">Rock</label>
+        <input type="checkbox" name="music[]" id="pop" value="pop"><label for="pop">Pop</label>
+        <input type="checkbox" name="music[]" id="hiphop" value="hiphop"><label for="hiphop">Hip-Hop</label>
+        <input type="checkbox" name="music[]" id="classical" value="classical"><label for="classical">Classical</label>
+        <input type="checkbox" name="music[]" id="jazz" value="jazz"><label for="jazz">Jazz</label>
+        <input type="checkbox" name="music[]" id="electronic" value="electronic"><label for="electronic">Electronic</label>
+        <input type="checkbox" name="music[]" id="country" value="country"><label for="country">Country</label>
+    </fieldset>
+
+    <label for="exercise">How often do you exercise per week?</label>
+    <select name="exercise" id="exercise">
+        <option value="never">Never</option>
+        <option value="1-2">1-2 times</option>
+        <option value="3-4">3-4 times</option>
+        <option value="5+">5+ times</option>
+    </select>
+
 
     <button type="submit">Submit</button>
 </form>

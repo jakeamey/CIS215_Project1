@@ -1,3 +1,32 @@
+<?php
+// Define a hashed password for validation
+$hashedPassword = password_hash("jacobamey", PASSWORD_DEFAULT);
+
+// Function to validate and sanitize input
+define('HASHED_PASSWORD', 'DD4D15E0EADC452E7BC6389C16F9FC83B366BFEC83333724AA7877ADACF43C22');
+
+function clean_input($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = clean_input($_POST["email"]);
+    $password = $_POST["password"];
+    $age = clean_input($_POST["age"]);
+    $gender = clean_input($_POST["gender"]);
+    
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        die("Invalid email format");
+    }
+
+    // Verify password
+    if (!password_verify($password, HASHED_PASSWORD)) {
+        die("Invalid password");
+    }
+    echo "Survey submitted successfully!";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,96 +1,143 @@
 <?php
-// Define a hashed password for validation
-$hashedPassword = password_hash("jacobamey", PASSWORD_DEFAULT);
+// Author: Jacob Amey
+// CIS 215 Project 1
 
-// Function to validate and sanitize input
-define('HASHED_PASSWORD', 'DD4D15E0EADC452E7BC6389C16F9FC83B366BFEC83333724AA7877ADACF43C22');
-
+// Function to sanitize input
 function clean_input($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
+    return htmlspecialchars(trim($data));
 }
 
+// Error messages
+$errors = [];
+$email = $password = $age = $gender = $hobby = $hobby_hours = "";
+
+// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = clean_input($_POST["email"]);
-    $password = $_POST["password"];
-    $age = clean_input($_POST["age"]);
-    $gender = clean_input($_POST["gender"]);
-    
     // Validate email
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        die("Invalid email format");
+    if (empty($_POST["email"])) {
+        $errors["email"] = "Email is required.";
+    } else {
+        $email = clean_input($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors["email"] = "Invalid email format.";
+        }
     }
 
-    // Verify password
-    if (!password_verify($password, HASHED_PASSWORD)) {
-        die("Invalid password");
+    //Password hash for "jacobamey"
+    $hashedPassword = "$2y$10$1cnX3CDfSvTfDeosai/rPezAr/9ZfLtCCsvDlHN/FMa0kcj60mNRK";
+
+    // Validate password
+    $password = $_POST["password"] ?? '';
+    if (empty($password)) {
+        $errors["password"] = "Password is required.";
+    } elseif (!password_verify($password, $hashedPassword)) {
+        $errors["password"] = "Incorrect password.";
     }
-    echo "Survey submitted successfully!";
+
+    // Validate age
+    if (empty($_POST["age"])) {
+        $errors["age"] = "Please select your age range.";
+    } else {
+        $age = clean_input($_POST["age"]);
+    }
+
+    // Validate gender
+    if (empty($_POST["gender"])) {
+        $errors["gender"] = "Gender selection is required.";
+    } else {
+        $gender = clean_input($_POST["gender"]);
+    }
+
+    // Validate hobby
+    if (empty($_POST["hobby"])) {
+        $errors["hobby"] = "Please enter your favorite hobby.";
+    } else {
+        $hobby = clean_input($_POST["hobby"]);
+    }
+
+    // Validate hobby hours
+    if (empty($_POST["hobby_hours"])) {
+        $errors["hobby_hours"] = "Please select hours spent on hobbies.";
+    } else {
+        $hobby_hours = clean_input($_POST["hobby_hours"]);
+    }
+
+    // Submit if no errors
+    if (empty($errors)) {
+        header("Location: submit.php");
+        exit();
+    }
 }
 ?>
+<!-- HTML form -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survey: Favorite Hobbies</title> 
-    <link rel="stylesheet" href="styles.css"> <!-- Link to an external CSS file -->
 </head>
 <body>
 
-<form action="process.php" method="post" class="survey">
+<?php
+// Display errors at the top
+if (!empty($errors)) {
+    echo "<div style='color: red;'><ul>";
+    foreach ($errors as $error) {
+        echo "<li>$error</li>";
+    }
+    echo "</ul></div>";
+}
+?>
+
+<form action="" method="post">
     <label for="email">Enter your email: </label>
-    <input type="email" name="email" id="email" required>
+    <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email); ?>" required>
+    <br>
 
     <label for="password">Enter your password: </label>
     <input type="password" name="password" id="password" required>
+   <br>
 
     <fieldset>
         <legend>What age are you?</legend>
-        <input type="radio" name="age" id="age1" value="0-12"><label for="age1">0-12</label>
-        <input type="radio" name="age" id="age2" value="13-17"><label for="age2">13-17</label>
-        <input type="radio" name="age" id="age3" value="18-22"><label for="age3">18-22</label>
-        <input type="radio" name="age" id="age4" value="23-27"><label for="age4">23-27</label>
-        <input type="radio" name="age" id="age5" value="28-32"><label for="age5">28-32</label>
-        <input type="radio" name="age" id="age6" value="33-37"><label for="age6">33-37</label>
-        <input type="radio" name="age" id="age7" value="38-42"><label for="age7">38-42</label>
-        <input type="radio" name="age" id="age8" value="43-47"><label for="age8">43-47</label>
-        <input type="radio" name="age" id="age9" value="48-52"><label for="age9">48-52</label>
-        <input type="radio" name="age" id="age10" value="53-57"><label for="age10">53-57</label>
-        <input type="radio" name="age" id="age11" value="58-62"><label for="age11">58-62</label>
-        <input type="radio" name="age" id="age12" value="63-67"><label for="age12">63-67</label>
-        <input type="radio" name="age" id="age13" value="68+"><label for="age13">68+</label>
+        <?php
+        $age_ranges = ["0-12", "13-17", "18-22", "23-27", "28-32", "33-37", "38-42", "43-47", "48-52", "53-57", "58-62", "63-67", "68+"];
+        foreach ($age_ranges as $index => $range) {
+            $checked = ($age === $range) ? "checked" : "";
+            echo "<input type='radio' name='age' id='age$index' value='$range' $checked><label for='age$index'>$range</label>";
+        }
+        ?>
     </fieldset>
 
     <label for="gender">Select your gender:</label>
     <select name="gender" id="gender">
-        <option value="m">Male</option>
-        <option value="f">Female</option>
-        <option value="nb">Nonbinary</option>
-        <option value="gf">Genderfluid</option>
-        <option value="a">Agender</option>
-        <option value="o">Choose not to say/Other</option>
+        <option value="">Select</option>
+        <option value="m" <?php echo ($gender == "m") ? "selected" : ""; ?>>Male</option>
+        <option value="f" <?php echo ($gender == "f") ? "selected" : ""; ?>>Female</option>
+        <option value="nb" <?php echo ($gender == "nb") ? "selected" : ""; ?>>Nonbinary</option>
+        <option value="gf" <?php echo ($gender == "gf") ? "selected" : ""; ?>>Genderfluid</option>
+        <option value="a" <?php echo ($gender == "a") ? "selected" : ""; ?>>Agender</option>
+        <option value="o" <?php echo ($gender == "o") ? "selected" : ""; ?>>Choose not to say/Other</option>
     </select>
-    <fieldset>
-        <legend>What is your favorite type of music? (Select all that apply)</legend>
-        <input type="checkbox" name="music[]" id="rock" value="rock"><label for="rock">Rock</label>
-        <input type="checkbox" name="music[]" id="pop" value="pop"><label for="pop">Pop</label>
-        <input type="checkbox" name="music[]" id="hiphop" value="hiphop"><label for="hiphop">Hip-Hop</label>
-        <input type="checkbox" name="music[]" id="classical" value="classical"><label for="classical">Classical</label>
-        <input type="checkbox" name="music[]" id="jazz" value="jazz"><label for="jazz">Jazz</label>
-        <input type="checkbox" name="music[]" id="electronic" value="electronic"><label for="electronic">Electronic</label>
-        <input type="checkbox" name="music[]" id="country" value="country"><label for="country">Country</label>
-    </fieldset>
+   <br>
 
-    <label for="exercise">How often do you exercise per week?</label>
-    <select name="exercise" id="exercise">
-        <option value="never">Never</option>
-        <option value="1-2">1-2 times</option>
-        <option value="3-4">3-4 times</option>
-        <option value="5+">5+ times</option>
+    <label for="hobby">What is your favorite hobby?</label>
+    <input type="text" name="hobby" id="hobby" value="<?php echo htmlspecialchars($hobby); ?>" required>
+    <br>
+
+    <label for="hobby_hours">How many hours per week do you spend on hobbies?</label>
+    <select name="hobby_hours" id="hobby_hours" required>
+        <option value="">Select hours</option>
+        <option value="0-1" <?php echo ($hobby_hours == "0-1") ? "selected" : ""; ?>>0-1 hours</option>
+        <option value="2-4" <?php echo ($hobby_hours == "2-4") ? "selected" : ""; ?>>2-4 hours</option>
+        <option value="5-7" <?php echo ($hobby_hours == "5-7") ? "selected" : ""; ?>>5-7 hours</option>
+        <option value="8-10" <?php echo ($hobby_hours == "8-10") ? "selected" : ""; ?>>8-10 hours</option>
+        <option value="11+" <?php echo ($hobby_hours == "11+") ? "selected" : ""; ?>>11 or more hours</option>
     </select>
+   <br>
 
-
-    <button type="submit">Submit</button>
+    <input type="submit" value="Submit">
 </form>
 
 </body>

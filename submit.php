@@ -1,6 +1,8 @@
 <?php
+//Author: Jacob Amey
 ?>
 <!DOCTYPE html>
+<!-- successful submit form -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">

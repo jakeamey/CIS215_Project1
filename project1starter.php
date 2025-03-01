@@ -11,9 +11,8 @@ function clean_input($data) {
 $errors = [];
 $email = $password = $age = $gender = $hobby = $hobby_hours = "";
 
-// Check if form is submitted
+// Validate and clean email
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate email
     if (empty($_POST["email"])) {
         $errors["email"] = "Email is required.";
     } else {
@@ -34,28 +33,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors["password"] = "Incorrect password.";
     }
 
-    // Validate age
+    // Validate and clean age
     if (empty($_POST["age"])) {
         $errors["age"] = "Please select your age range.";
     } else {
         $age = clean_input($_POST["age"]);
     }
 
-    // Validate gender
+    // Validate and clean gender
     if (empty($_POST["gender"])) {
         $errors["gender"] = "Gender selection is required.";
     } else {
         $gender = clean_input($_POST["gender"]);
     }
 
-    // Validate hobby
+    // Validate and clean hobby
     if (empty($_POST["hobby"])) {
         $errors["hobby"] = "Please enter your favorite hobby.";
     } else {
         $hobby = clean_input($_POST["hobby"]);
     }
 
-    // Validate hobby hours
+    // Validate and clean hobby hours
     if (empty($_POST["hobby_hours"])) {
         $errors["hobby_hours"] = "Please select hours spent on hobbies.";
     } else {
@@ -80,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <?php
+
 // Display errors at the top
 if (!empty($errors)) {
     echo "<div style='color: red;'><ul>";
@@ -90,15 +90,16 @@ if (!empty($errors)) {
 }
 ?>
 
+<!-- email form -->
 <form action="" method="post">
     <label for="email">Enter your email: </label>
     <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email); ?>" required>
     <br>
-
+<!-- password form -->
     <label for="password">Enter your password: </label>
     <input type="password" name="password" id="password" required>
    <br>
-
+<!-- age form -->
     <fieldset>
         <legend>What age are you?</legend>
         <?php
@@ -109,7 +110,7 @@ if (!empty($errors)) {
         }
         ?>
     </fieldset>
-
+<!-- gender form -->
     <label for="gender">Select your gender:</label>
     <select name="gender" id="gender">
         <option value="">Select</option>
@@ -121,11 +122,11 @@ if (!empty($errors)) {
         <option value="o" <?php echo ($gender == "o") ? "selected" : ""; ?>>Choose not to say/Other</option>
     </select>
    <br>
-
+<!-- hobby form -->
     <label for="hobby">What is your favorite hobby?</label>
     <input type="text" name="hobby" id="hobby" value="<?php echo htmlspecialchars($hobby); ?>" required>
     <br>
-
+<!-- hobby hours form -->
     <label for="hobby_hours">How many hours per week do you spend on hobbies?</label>
     <select name="hobby_hours" id="hobby_hours" required>
         <option value="">Select hours</option>
@@ -136,7 +137,7 @@ if (!empty($errors)) {
         <option value="11+" <?php echo ($hobby_hours == "11+") ? "selected" : ""; ?>>11 or more hours</option>
     </select>
    <br>
-
+<!-- submit button -->
     <input type="submit" value="Submit">
 </form>
 

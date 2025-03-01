@@ -1,5 +1,6 @@
 <?php
 //Author: Jacob Amey
+//https://csnlinux.genesee.edu/~jamey/proj1/CIS215_Project1/submit.php
 ?>
 <!DOCTYPE html>
 <!-- successful submit form -->

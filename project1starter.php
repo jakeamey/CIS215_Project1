@@ -1,6 +1,7 @@
 <?php
 // Author: Jacob Amey
 // CIS 215 Project 1
+//https://csnlinux.genesee.edu/~jamey/proj1/CIS215_Project1/project1starter.php
 
 // Function to sanitize input
 function clean_input($data) {

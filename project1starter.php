@@ -115,12 +115,12 @@ if (!empty($errors)) {
     <label for="gender">Select your gender:</label>
     <select name="gender" id="gender">
         <option value="">Select</option>
-        <option value="m" <?php echo ($gender == "m") ? "selected" : ""; ?>>Male</option>
-        <option value="f" <?php echo ($gender == "f") ? "selected" : ""; ?>>Female</option>
-        <option value="nb" <?php echo ($gender == "nb") ? "selected" : ""; ?>>Nonbinary</option>
-        <option value="gf" <?php echo ($gender == "gf") ? "selected" : ""; ?>>Genderfluid</option>
-        <option value="a" <?php echo ($gender == "a") ? "selected" : ""; ?>>Agender</option>
-        <option value="o" <?php echo ($gender == "o") ? "selected" : ""; ?>>Choose not to say/Other</option>
+        <option value="m">Male</option>
+        <option value="f">Female</option>
+        <option value="nb">Nonbinary</option>
+        <option value="gf">Genderfluid</option>
+        <option value="a">Agender</option>
+        <option value="o">Choose not to say/Other</option>
     </select>
    <br>
 <!-- hobby form -->
@@ -131,11 +131,11 @@ if (!empty($errors)) {
     <label for="hobby_hours">How many hours per week do you spend on hobbies?</label>
     <select name="hobby_hours" id="hobby_hours" required>
         <option value="">Select hours</option>
-        <option value="0-1" <?php echo ($hobby_hours == "0-1") ? "selected" : ""; ?>>0-1 hours</option>
-        <option value="2-4" <?php echo ($hobby_hours == "2-4") ? "selected" : ""; ?>>2-4 hours</option>
-        <option value="5-7" <?php echo ($hobby_hours == "5-7") ? "selected" : ""; ?>>5-7 hours</option>
-        <option value="8-10" <?php echo ($hobby_hours == "8-10") ? "selected" : ""; ?>>8-10 hours</option>
-        <option value="11+" <?php echo ($hobby_hours == "11+") ? "selected" : ""; ?>>11 or more hours</option>
+        <option value="0-1">0-1 hours</option>
+        <option value="2-4">2-4 hours</option>
+        <option value="5-7">5-7 hours</option>
+        <option value="8-10">8-10 hours</option>
+        <option value="11+">11 or more hours</option>
     </select>
    <br>
 <!-- submit button -->

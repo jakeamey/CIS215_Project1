@@ -3,6 +3,16 @@
 // CIS 215 Project 1
 //https://csnlinux.genesee.edu/~jamey/proj1/CIS215_Project1/project1starter.php
 
+// Database connection
+$servername = "csnlinux.genesee.edu";
+$username = "jamey";
+$password = "trident";
+$dbname = "project1";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+
 // Function to sanitize input
 function clean_input($data) {
     return htmlspecialchars(trim($data));

@@ -3,16 +3,20 @@
 // CIS 215 Project 1
 //https://csnlinux.genesee.edu/~jamey/proj1/CIS215_Project1/project1starter.php
 
+
 // Database connection
-$servername = "csnlinux.genesee.edu";
-$username = "jamey";
-$password = "trident";
-$dbname = "project1";
+$servername = "localhost";
+$username = "jamey"; 
+$password = "trident"; 
+$dbname = "jamey_db"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 // Function to sanitize input
 function clean_input($data) {
     return htmlspecialchars(trim($data));
@@ -71,14 +75,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $hobby_hours = clean_input($_POST["hobby_hours"]);
     }
-
-    // Submit if no errors
+   //Submit data into SQL if no errors
     if (empty($errors)) {
-        header("Location: submit.php");
-        exit();
+        $stmt = $conn->prepare("INSERT INTO users (email, age_range, gender, hobby, hobby_hours) VALUES (?, ?, ?, ?, ?)");
+    
+        if ($stmt) {
+            $stmt->bind_param("sssss", $email, $age, $gender, $hobby, $hobby_hours);
+            $stmt->execute();
+    
+            echo ($stmt->affected_rows > 0) ? "Data inserted successfully!" : "Failed to insert data.";
+            $stmt->close();
+    
+            header("Location: submit.php");
+            exit();
+        } else {
+            die("Statement preparation failed: " . $conn->error);
+        }
     }
+    
 }
+
+// Close database connection
+$conn->close();
 ?>
+
 <!-- HTML form -->
 <!DOCTYPE html>
 <html lang="en">

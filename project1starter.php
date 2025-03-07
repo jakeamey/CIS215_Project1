@@ -76,8 +76,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hobby_hours = clean_input($_POST["hobby_hours"]);
     }
     
-    // Insert data into the users table if no errors
-    if (empty($errors)) {
+// Insert data into the users table if no errors
+if (empty($errors)) {
+    // Check if the email already exists in the database
+    $stmt_check_email = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt_check_email->bind_param("s", $email);
+    $stmt_check_email->execute();
+    $result = $stmt_check_email->get_result();
+
+    if ($result->num_rows > 0) {
+        $errors["email"] = "This email is already registered.";
+    } else {
+        // Prepare the insert statement
         $stmt = $conn->prepare("INSERT INTO users (email, age_range, gender, hobby, hobby_hours) VALUES (?, ?, ?, ?, ?)");
         
         // Check if the statement was prepared successfully
@@ -96,6 +106,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $stmt->close();
     }
+
+    $stmt_check_email->close();
+}
+
     
     // Submit if no errors
     if (empty($errors)) {

@@ -13,5 +13,7 @@
 <body>
     <p>Success</p>
     <a href="project1starter.php">Go back</a>
+    <a href="datapage.php">View Submitted Data</a>
+
 </body>
 </html>

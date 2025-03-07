@@ -75,24 +75,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $hobby_hours = clean_input($_POST["hobby_hours"]);
     }
-   //Submit data into SQL if no errors
+    
+    // Insert data into the users table if no errors
     if (empty($errors)) {
         $stmt = $conn->prepare("INSERT INTO users (email, age_range, gender, hobby, hobby_hours) VALUES (?, ?, ?, ?, ?)");
-    
-        if ($stmt) {
-            $stmt->bind_param("sssss", $email, $age, $gender, $hobby, $hobby_hours);
-            $stmt->execute();
-    
-            echo ($stmt->affected_rows > 0) ? "Data inserted successfully!" : "Failed to insert data.";
-            $stmt->close();
-    
-            header("Location: submit.php");
-            exit();
-        } else {
+        
+        // Check if the statement was prepared successfully
+        if (!$stmt) {
             die("Statement preparation failed: " . $conn->error);
         }
+
+        $stmt->bind_param("sssss", $email, $age, $gender, $hobby, $hobby_hours);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            echo "Data inserted successfully!";
+        } else {
+            echo "Failed to insert data.";
+        }
+        
+        $stmt->close();
     }
     
+    // Submit if no errors
+    if (empty($errors)) {
+        header("Location: submit.php");
+        exit();
+    } 
 }
 
 // Close database connection
